@@ -1,3 +1,4 @@
 # Listas_Enlazadas
 
-Integrantes: Gianfranco Cordero y Federico Iribar
+Integrantes: Gianfranco Cordero , Federico Iribar y David Salaverry.
+
