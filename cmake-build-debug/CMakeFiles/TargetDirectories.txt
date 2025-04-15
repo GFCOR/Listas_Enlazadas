@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 C:/Users/gianf/CLionProjects/Listas_Enlazadas/cmake-build-debug/CMakeFiles/Listas_Enlazadas.dir
 C:/Users/gianf/CLionProjects/Listas_Enlazadas/cmake-build-debug/CMakeFiles/edit_cache.dir
 C:/Users/gianf/CLionProjects/Listas_Enlazadas/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+=======
+C:/Users/gianf/CLionProjects/Listas_Enlazadas/cmake-build-debug/CMakeFiles/Listas_Enlazadas.dir
+C:/Users/gianf/CLionProjects/Listas_Enlazadas/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/gianf/CLionProjects/Listas_Enlazadas/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+>>>>>>> 05176832bdd1eab2a3b22949dcb60dbf2db7e659
