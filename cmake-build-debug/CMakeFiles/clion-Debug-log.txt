@@ -1,21 +1,6 @@
-"D:\CLion 2024.3.4\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=D:/CLion 2024.3.4/bin/ninja/win/x64/ninja.exe" -G Ninja -S C:\Users\gianf\CLionProjects\Listas_Enlazadas -B C:\Users\gianf\CLionProjects\Listas_Enlazadas\cmake-build-debug
-<<<<<<< HEAD
--- Configuring done (0.3s)
--- Generating done (0.1s)
-=======
--- The C compiler identification is GNU 13.1.0
--- The CXX compiler identification is GNU 13.1.0
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Check for working C compiler: D:/CLion 2024.3.4/bin/mingw/bin/gcc.exe - skipped
--- Detecting C compile features
--- Detecting C compile features - done
--- Detecting CXX compiler ABI info
--- Detecting CXX compiler ABI info - done
--- Check for working CXX compiler: D:/CLion 2024.3.4/bin/mingw/bin/g++.exe - skipped
--- Detecting CXX compile features
--- Detecting CXX compile features - done
--- Configuring done (2.5s)
--- Generating done (0.0s)
->>>>>>> 05176832bdd1eab2a3b22949dcb60dbf2db7e659
--- Build files have been written to: C:/Users/gianf/CLionProjects/Listas_Enlazadas/cmake-build-debug
+"C:\Program Files\JetBrains\CLion 2023.2\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" -S C:\DAVID\CS\Ciclo5\AED\tareas\tarea1_listas_enlazadas\Listas_Enlazadas -B C:\DAVID\CS\Ciclo5\AED\tareas\tarea1_listas_enlazadas\Listas_Enlazadas\cmake-build-debug
+CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
+  CMake 3.30 or higher is required.  You are running version 3.26.4
+
+
+-- Configuring incomplete, errors occurred!
