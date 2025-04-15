@@ -1,0 +1,3 @@
+C:/Users/gianf/CLionProjects/Listas_enlazadas/cmake-build-debug/CMakeFiles/Listas_enlazadas.dir
+C:/Users/gianf/CLionProjects/Listas_enlazadas/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/gianf/CLionProjects/Listas_enlazadas/cmake-build-debug/CMakeFiles/rebuild_cache.dir
