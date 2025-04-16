@@ -172,20 +172,20 @@ public:
         }
     }
 
-    void sort(){
+    void sort() override {
         if (nodes < 2) return;
 
         bool swapped;
         do {
             swapped = false;
             Node* current = head->next;
-            while (current->next != head) {
+            do {
                 if (current->data > current->next->data) {
                     std::swap(current->data, current->next->data);
                     swapped = true;
                 }
                 current = current->next;
-            }
+            } while (current != head);
         } while (swapped);
     }
 
