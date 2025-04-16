@@ -2,6 +2,7 @@
 #define CIRCULAR_H
 #include <iostream>
 #include "list.h"
+#include <algorithm>
 
 // TODO: Implement all methods
 template <typename T>

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <stdexcept>
 #include "list.h"
+#include <algorithm>
 
 //TODO: Implement al methods
 template <typename T>

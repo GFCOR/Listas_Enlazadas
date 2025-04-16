@@ -2,6 +2,7 @@
 #define FORWARD_H
 #include <iostream>
 #include "list.h"
+#include <algorithm>
 
 // TODO: Implement all methods
 template <typename T>
@@ -172,23 +173,23 @@ public:
         }
     }
 
-    void sort(){
-        bool sorted = true;
-        if(head == nullptr||head->next == nullptr){
+    void sort() override {
+        if (head == nullptr || head->next == nullptr) {
             return;
         }
-        Node* p = head;
-        do{
-            sorted = true;
-            p=head;
-            while(p->next != nullptr){
-                if(p->next->data < p->data){
-                    sorted = false;
-                    swap(p->data, p->next->data);
+
+        bool swapped;
+        do {
+            swapped = false;
+            Node* p = head;
+            while (p != nullptr && p->next != nullptr) {
+                if (p->data > p->next->data) {
+                    std::swap(p->data, p->next->data);
+                    swapped = true;
                 }
-                p=p->next;
+                p = p->next;
             }
-        }while(sorted == false);
+        } while (swapped);
     }
 
     bool is_sorted(){
