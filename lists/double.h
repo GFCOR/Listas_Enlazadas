@@ -95,15 +95,18 @@ public:
         return data;
     }
 
-    T insert(T data, int pos) {
-        if (pos < 0 || pos > nodes) throw std::out_of_range("Posición inválida");
+
+    bool insert(T data, int pos) override {
+        if (pos < 0 || pos > nodes) {
+            throw std::out_of_range("Posición inválida");
+        }
         if (pos == 0) {
             push_front(data);
-            return data;
+            return true;
         }
         if (pos == nodes) {
             push_back(data);
-            return data;
+            return true;
         }
         Node* newNode = new Node(data);
         Node* current = head;
@@ -115,8 +118,9 @@ public:
         current->next->prev = newNode;
         current->next = newNode;
         nodes++;
-        return data;
+        return true;
     }
+
 
     bool remove(int pos) {
         if (pos < 0 || pos >= nodes) throw std::out_of_range("Posición inválida");

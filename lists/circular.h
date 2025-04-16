@@ -100,17 +100,18 @@ public:
         nodes--;
         return data;
     }
-    T insert(T data, int pos){
+
+    bool insert(T data, int pos) override {
         if (pos < 0 || pos >= nodes) {
             throw std::out_of_range("out of range");
         }
         if (pos == nodes) {
             push_back(data);
-            return;
+            return true;
         }
         Node* newNode = new Node(data);
         Node* temp = head->next;
-        for (int i = 0; i < pos-1; i++){
+        for (int i = 0; i < pos - 1; i++) {
             temp = temp->next;
         }
         newNode->next = temp->next;
@@ -118,8 +119,9 @@ public:
         temp->next->prev = newNode;
         temp->next = newNode;
         nodes++;
-        return data;
+        return true;
     }
+
 
     bool remove(int pos){
         if (pos < 0 || pos >= nodes) {

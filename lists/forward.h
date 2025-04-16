@@ -104,19 +104,21 @@ public:
         p->next = nullptr; return data;
     }
 
-    T insert(T data, int pos){
-        if(pos > this->size()){
+
+    bool insert(T data, int pos) override {
+        if (pos > this->size()) {
             throw std::out_of_range("List is out of range");
         }
         Node* p = head;
-        for(int i = 0; i < pos; i++){
+        for (int i = 0; i < pos; i++) {
             p = p->next;
         }
         Node* p2 = new Node(data);
         p2->next = p->next;
         p->next = p2;
-        return data;
+        return true;
     }
+
 
     bool remove(int pos){
         if(pos > this->size()){
