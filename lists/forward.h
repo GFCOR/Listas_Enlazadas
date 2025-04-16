@@ -4,7 +4,6 @@
 #include "list.h"
 #include <algorithm>
 
-// TODO: Implement all methods
 template <typename T>
 class ForwardList : public List<T> {
 private:
@@ -12,214 +11,182 @@ private:
         T data;
         Node* next;
 
-        Node(){
-            next = nullptr;
-        }
-
-        Node(T value){
-            data = value;
-            next = nullptr;
-        }
-
-        void killSelf(){
-            delete this;
-        }
+        Node(T value) : data(value), next(nullptr) {}
     };
 
-private:
     Node* head;
     int nodes;
 
 public:
-    ForwardList() : List<T>() {}
+    ForwardList() : head(nullptr), nodes(0) {}
 
-    ~ForwardList(){
-        // TODO
+    ~ForwardList() {
+        clear();
     }
 
-    T front(){
-        if(head == nullptr){
-            throw std::out_of_range("List is empty");
-        }
+    T front() override {
+        if (is_empty()) throw std::out_of_range("List is empty");
         return head->data;
     }
 
-    T back(){
-        if(head == nullptr){
-            throw std::out_of_range("List is empty");
-        }
-        Node* p = head;
-        while(p->next != nullptr){
-            p = p->next;
-        }
-        return p->data;
-    }
-
-    void push_front(T data){
-        if(head == nullptr){
-            head = new Node(data);
-        }
-        Node* p = new Node(data);
-        p->next = head;
-        head = p;
-    }
-
-    void push_back(T data){
-        if(head == nullptr){
-            head = new Node(data);
-        }
-        Node* p = new Node(data);
-        p->next = nullptr;
+    T back() override {
+        if (is_empty()) throw std::out_of_range("List is empty");
         Node* temp = head;
-        while(temp->next != nullptr){
+        while (temp->next != nullptr) {
             temp = temp->next;
         }
-        temp->next = p;
+        return temp->data;
     }
 
-    T pop_front(){
-        if(head == nullptr){
-            throw std::out_of_range("List is empty");
-        }
+    void push_front(T data) override {
+        Node* newNode = new Node(data);
+        newNode->next = head;
+        head = newNode;
+        nodes++;
+    }
 
-        Node* p = head;
-        T data = head->data;
-        head = p->next;
-        delete p;
+    void push_back(T data) override {
+        Node* newNode = new Node(data);
+        if (is_empty()) {
+            head = newNode;
+        } else {
+            Node* temp = head;
+            while (temp->next != nullptr) {
+                temp = temp->next;
+            }
+            temp->next = newNode;
+        }
+        nodes++;
+    }
+
+    T pop_front() override {
+        if (is_empty()) throw std::out_of_range("List is empty");
+        Node* temp = head;
+        T data = temp->data;
+        head = head->next;
+        delete temp;
+        nodes--;
         return data;
     }
 
-    T pop_back(){
-        if(head == nullptr){
-            throw std::out_of_range("List is empty");
-        }
-        if(head->next == nullptr){
+    T pop_back() override {
+        if (is_empty()) throw std::out_of_range("List is empty");
+        if (head->next == nullptr) {
+            T data = head->data;
             delete head;
+            head = nullptr;
+            nodes--;
+            return data;
         }
-        Node* p = head;
-        while(p->next->next != nullptr){
-            p = p->next;
+        Node* temp = head;
+        while (temp->next->next != nullptr) {
+            temp = temp->next;
         }
-        T data = p->next->data;
-        delete p->next;
-        p->next = nullptr; return data;
+        T data = temp->next->data;
+        delete temp->next;
+        temp->next = nullptr;
+        nodes--;
+        return data;
     }
-
 
     bool insert(T data, int pos) override {
-        if (pos > this->size()) {
-            throw std::out_of_range("List is out of range");
-        }
-        Node* p = head;
-        for (int i = 0; i < pos; i++) {
-            p = p->next;
-        }
-        Node* p2 = new Node(data);
-        p2->next = p->next;
-        p->next = p2;
-        return true;
-    }
-
-
-    bool remove(int pos){
-        if(pos > this->size()){
-            throw std::out_of_range("List is out of range");
-        }
-        if(pos == this->size()){
-            pop_back();
+        if (pos < 0 || pos > nodes) return false;
+        if (pos == 0) {
+            push_front(data);
             return true;
         }
-        Node* p = head;
-        for(int i = 0; i < pos-1; i++){
-            p = p->next;
+        Node* temp = head;
+        for (int i = 0; i < pos - 1; i++) {
+            temp = temp->next;
         }
-        Node* p2 = p->next->next;
-        delete p->next;
-        p->next = p2;
+        Node* newNode = new Node(data);
+        newNode->next = temp->next;
+        temp->next = newNode;
+        nodes++;
         return true;
     }
 
-    T& operator[](int pos){
-        if(pos > this->size()){
-            throw std::out_of_range("List is out of range");
+    bool remove(int pos) override {
+        if (pos < 0 || pos >= nodes) return false;
+        if (pos == 0) {
+            pop_front();
+            return true;
         }
-        Node* p = head;
-        for(int i = 0; i < pos; i++){
-            p = p->next;
+        Node* temp = head;
+        for (int i = 0; i < pos - 1; i++) {
+            temp = temp->next;
         }
-        return p->data;
+        Node* toDelete = temp->next;
+        temp->next = toDelete->next;
+        delete toDelete;
+        nodes--;
+        return true;
+    }
+
+    T& operator[](int pos) override {
+        if (pos < 0 || pos >= nodes) throw std::out_of_range("Index out of range");
+        Node* temp = head;
+        for (int i = 0; i < pos; i++) {
+            temp = temp->next;
+        }
+        return temp->data;
     }
 
     bool is_empty() override {
-        return head == nullptr;
+        return nodes == 0;
     }
 
-    int size(){
-        int count = 0;
-        Node* p = head;
-        while(p != nullptr){
-            p = p->next;
-            count++;
-        }
-        return count;
+    int size() override {
+        return nodes;
     }
 
-    void clear(){
-        Node* p = head;
-        while(p != nullptr){
+    void clear() override {
+        while (!is_empty()) {
             pop_front();
         }
     }
 
     void sort() override {
-        if (head == nullptr || head->next == nullptr) {
-            return;
-        }
-
+        if (nodes < 2) return;
         bool swapped;
         do {
             swapped = false;
-            Node* p = head;
-            while (p != nullptr && p->next != nullptr) {
-                if (p->data > p->next->data) {
-                    std::swap(p->data, p->next->data);
+            Node* temp = head;
+            while (temp->next != nullptr) {
+                if (temp->data > temp->next->data) {
+                    std::swap(temp->data, temp->next->data);
                     swapped = true;
                 }
-                p = p->next;
+                temp = temp->next;
             }
         } while (swapped);
     }
 
     bool is_sorted() override {
-        if (head == nullptr) {
-            return true;
-        }
+        if (is_empty()) return true;
         Node* temp = head;
         while (temp->next != nullptr) {
-            if (temp->data > temp->next->data) {
-                return false;
-            }
+            if (temp->data > temp->next->data) return false;
             temp = temp->next;
         }
         return true;
     }
 
-
-    void reverse(){
-        Node* newHead = nullptr;
-        while (head != nullptr) {
-            Node* temp = head;
-            head = head->next;
-            temp->next = newHead;
-            newHead = temp;
+    void reverse() override {
+        Node* prev = nullptr;
+        Node* curr = head;
+        while (curr != nullptr) {
+            Node* next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
         }
-        head = newHead;
+        head = prev;
     }
 
-    std::string name(){
+    std::string name() override {
         return "ForwardList";
-        }
-
+    }
 };
 
 #endif

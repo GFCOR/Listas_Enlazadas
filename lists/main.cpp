@@ -3,7 +3,6 @@
 #include "forward.h"
 #include "double.h"
 #include "circular.h"
-#include <algorithm>
 
 using namespace std;
 

@@ -2,11 +2,9 @@
 #define DOUBLY_H
 
 #include <iostream>
-#include <stdexcept>
 #include "list.h"
 #include <algorithm>
 
-//TODO: Implement al methods
 template <typename T>
 class DoubleList : public List<T> {
 private:
@@ -15,15 +13,7 @@ private:
         Node* next;
         Node* prev;
 
-
-        Node() : data(T()), next(nullptr), prev(nullptr) {}
-        //TODO
         Node(T value) : data(value), next(nullptr), prev(nullptr) {}
-        //TODO
-        void killSelf() {
-            if (next) next->killSelf();
-            delete this;
-        }
     };
 
     Node* head;
@@ -37,18 +27,17 @@ public:
         clear();
     }
 
-    T front() {
-        if (is_empty()) throw std::runtime_error("La lista está vacía");
-        return head->data;
+    T front() override {
+        if (is_empty()) throw std::out_of_range("List is empty");
         return head->data;
     }
 
-    T back() {
-        if (is_empty()) throw std::runtime_error("La lista está vacía");
+    T back() override {
+        if (is_empty()) throw std::out_of_range("List is empty");
         return tail->data;
     }
 
-    void push_front(T data) {
+    void push_front(T data) override {
         Node* newNode = new Node(data);
         if (is_empty()) {
             head = tail = newNode;
@@ -60,7 +49,7 @@ public:
         nodes++;
     }
 
-    void push_back(T data) {
+    void push_back(T data) override {
         Node* newNode = new Node(data);
         if (is_empty()) {
             head = tail = newNode;
@@ -72,8 +61,8 @@ public:
         nodes++;
     }
 
-    T pop_front() {
-        if (is_empty()) throw std::runtime_error("La lista está vacía");
+    T pop_front() override {
+        if (is_empty()) throw std::out_of_range("List is empty");
         Node* temp = head;
         T data = temp->data;
         head = head->next;
@@ -84,8 +73,8 @@ public:
         return data;
     }
 
-    T pop_back() {
-        if (is_empty()) throw std::runtime_error("La lista está vacía");
+    T pop_back() override {
+        if (is_empty()) throw std::out_of_range("List is empty");
         Node* temp = tail;
         T data = temp->data;
         tail = tail->prev;
@@ -96,11 +85,8 @@ public:
         return data;
     }
 
-
     bool insert(T data, int pos) override {
-        if (pos < 0 || pos > nodes) {
-            throw std::out_of_range("Posición inválida");
-        }
+        if (pos < 0 || pos > nodes) return false;
         if (pos == 0) {
             push_front(data);
             return true;
@@ -109,22 +95,21 @@ public:
             push_back(data);
             return true;
         }
-        Node* newNode = new Node(data);
-        Node* current = head;
-        for (int i = 0; i < pos - 1; ++i) {
-            current = current->next;
+        Node* temp = head;
+        for (int i = 0; i < pos - 1; i++) {
+            temp = temp->next;
         }
-        newNode->next = current->next;
-        newNode->prev = current;
-        current->next->prev = newNode;
-        current->next = newNode;
+        Node* newNode = new Node(data);
+        newNode->next = temp->next;
+        newNode->prev = temp;
+        temp->next->prev = newNode;
+        temp->next = newNode;
         nodes++;
         return true;
     }
 
-
-    bool remove(int pos) {
-        if (pos < 0 || pos >= nodes) throw std::out_of_range("Posición inválida");
+    bool remove(int pos) override {
+        if (pos < 0 || pos >= nodes) return false;
         if (pos == 0) {
             pop_front();
             return true;
@@ -133,83 +118,84 @@ public:
             pop_back();
             return true;
         }
-        Node* current = head;
-        for (int i = 0; i < pos; ++i) {
-            current = current->next;
+        Node* temp = head;
+        for (int i = 0; i < pos; i++) {
+            temp = temp->next;
         }
-        current->prev->next = current->next;
-        current->next->prev = current->prev;
-        delete current;
+        temp->prev->next = temp->next;
+        temp->next->prev = temp->prev;
+        delete temp;
         nodes--;
         return true;
     }
 
-    T& operator[](int pos) {
-        if (pos < 0 || pos >= nodes) throw std::out_of_range("Posición inválida");
-        Node* current = head;
-        for (int i = 0; i < pos; ++i) {
-            current = current->next;
+    T& operator[](int pos) override {
+        if (pos < 0 || pos >= nodes) throw std::out_of_range("Index out of range");
+        Node* temp = head;
+        for (int i = 0; i < pos; i++) {
+            temp = temp->next;
         }
-        return current->data;
+        return temp->data;
     }
 
     bool is_empty() override {
-        return head == nullptr && tail == nullptr;
+        return nodes == 0;
     }
 
-    int size() {
+    int size() override {
         return nodes;
     }
 
-    void clear() {
-        Node* current = head;
-        while (current != nullptr) {
-            Node* next = current->next;
-            delete current;
-            current = next;
+    void clear() override {
+        while (!is_empty()) {
+            pop_front();
         }
-        head = tail = nullptr;
-        nodes = 0;
-
     }
 
-    void sort() {
-        if (is_empty() || nodes == 1) return;
-        for (Node* i = head; i->next != nullptr; i = i->next) {
-            for (Node* j = i->next; j != nullptr; j = j->next) {
-                if (i->data > j->data) {
-                    std::swap(i->data, j->data);
+    void sort() override {
+        if (nodes < 2) return;
+        bool swapped;
+        do {
+            swapped = false;
+            Node* temp = head;
+            while (temp->next != nullptr) {
+                if (temp->data > temp->next->data) {
+                    std::swap(temp->data, temp->next->data);
+                    swapped = true;
                 }
+                temp = temp->next;
             }
-        }
+        } while (swapped);
     }
 
-    bool is_sorted() {
-        if (is_empty() || nodes == 1) return true;
-        for (Node* current = head; current->next != nullptr; current = current->next) {
-            if (current->data > current->next->data) return false;
+    bool is_sorted() override {
+        if (is_empty()) return true;
+        Node* temp = head;
+        while (temp->next != nullptr) {
+            if (temp->data > temp->next->data) return false;
+            temp = temp->next;
         }
         return true;
     }
 
-    void reverse() {
-        if (is_empty() || nodes == 1) return;
-        Node* current = head;
+    void reverse() override {
         Node* temp = nullptr;
+        Node* current = head;
+        tail = head;
         while (current != nullptr) {
             temp = current->prev;
             current->prev = current->next;
             current->next = temp;
             current = current->prev;
         }
-        temp = head;
-        head = tail;
-        tail = temp;
+        if (temp != nullptr) {
+            head = temp->prev;
+        }
     }
 
-    std::string name() {
+    std::string name() override {
         return "DoublyLinkedList";
-        }
+    }
 };
 
 #endif
