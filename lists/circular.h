@@ -201,13 +201,15 @@ public:
         return true;
 
     }
-    void reverse(){
+
+    void reverse() override {
         Node* current = head;
         do {
-            swap(current->next, current->prev);
+            std::swap(current->next, current->prev);
             current = current->prev;
         } while (current != head);
     }
+
 
     std::string name(){
         return "ForwardList";

@@ -192,22 +192,20 @@ public:
         } while (swapped);
     }
 
-    bool is_sorted(){
-        if(head == nullptr){
-            return false;
-        }
-        if(head->next == nullptr){
+    bool is_sorted() override {
+        if (head == nullptr) {
             return true;
         }
-        Node* p = head;
-        while(p->next != nullptr){
-            if(p->next->data < p->data){
+        Node* temp = head;
+        while (temp->next != nullptr) {
+            if (temp->data > temp->next->data) {
                 return false;
             }
-            p=p->next;
+            temp = temp->next;
         }
         return true;
     }
+
 
     void reverse(){
         Node* newHead = nullptr;
