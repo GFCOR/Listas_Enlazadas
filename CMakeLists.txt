@@ -3,4 +3,4 @@ project(Listas_Enlazadas)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Listas_Enlazadas main.cpp)
+add_executable(Listas_Enlazadas lists/main.cpp)

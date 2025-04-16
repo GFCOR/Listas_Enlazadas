@@ -153,8 +153,8 @@ public:
         return current->data;
     }
 
-    bool is_empty() {
-        return nodes == 0;
+    bool is_empty() override {
+        return head == nullptr && tail == nullptr;
     }
 
     int size() {

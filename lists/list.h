@@ -1,3 +1,5 @@
+#ifndef LIST_H
+#define LIST_H
 
 #include <iostream>
 #include <stdexcept>
@@ -590,33 +592,5 @@ public:
     }
 };
 
-//////////////////////////////
-// Ejemplo de uso (main)
-//////////////////////////////
-int main() {
-    // Ejemplo básico para probar las implementaciones
+#endif
 
-    ForwardLinkedList<int> flist;
-    flist.push_back(3);
-    flist.push_front(1);
-    flist.push_back(2);
-    std::cout << flist.name() << " Front: " << flist.front() << ", Back: " << flist.back() << std::endl;
-    flist.sort();
-    std::cout << "Elemento en posición 1 luego de ordenar: " << flist[1] << std::endl;
-    flist.reverse();
-    std::cout << "Elemento en posición 1 luego de revertir: " << flist[1] << std::endl;
-
-    DoublyLinkedList<int> dlist;
-    dlist.push_back(10);
-    dlist.push_front(5);
-    dlist.push_back(15);
-    std::cout << dlist.name() << " Front: " << dlist.front() << ", Back: " << dlist.back() << std::endl;
-
-    CircularDoublyLinkedList<int> clist;
-    clist.push_back(100);
-    clist.push_front(50);
-    clist.push_back(150);
-    std::cout << clist.name() << " Front: " << clist.front() << ", Back: " << clist.back() << std::endl;
-
-    return 0;
-}

@@ -150,10 +150,8 @@ public:
         return p->data;
     }
 
-    bool is_empty(){
-        if(head == nullptr){
-            return true;
-        }
+    bool is_empty() override {
+        return head == nullptr;
     }
 
     int size(){

@@ -152,11 +152,8 @@ public:
         return temp->data;
     }
 
-    bool is_empty(){
-        if (head->next == head){
-            return true;
-        }
-        return false;
+    bool is_empty() override {
+        return head->next == head;
     }
 
     int size(){
