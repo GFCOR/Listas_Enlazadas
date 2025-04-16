@@ -16,9 +16,9 @@ private:
 
 
         Node() : data(T()), next(nullptr), prev(nullptr) {}
-				//TODO
+        //TODO
         Node(T value) : data(value), next(nullptr), prev(nullptr) {}
-				//TODO
+        //TODO
         void killSelf() {
             if (next) next->killSelf();
             delete this;
@@ -37,8 +37,8 @@ public:
     }
 
     T front() {
-      	if (is_empty()) throw std::runtime_error("La lista está vacía");
-		return head->data;
+        if (is_empty()) throw std::runtime_error("La lista está vacía");
+        return head->data;
         return head->data;
     }
 
@@ -157,14 +157,14 @@ public:
     }
 
     void clear() {
-    Node* current = head;
-    while (current != nullptr) {
-        Node* next = current->next;
-        delete current;
-        current = next;
-    }
-    head = tail = nullptr;
-    nodes = 0;
+        Node* current = head;
+        while (current != nullptr) {
+            Node* next = current->next;
+            delete current;
+            current = next;
+        }
+        head = tail = nullptr;
+        nodes = 0;
 
     }
 
@@ -204,7 +204,7 @@ public:
 
     std::string name() {
         return "DoublyLinkedList";
-    }
+        }
 };
 
 #endif

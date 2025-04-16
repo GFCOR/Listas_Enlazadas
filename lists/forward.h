@@ -3,6 +3,7 @@
 #include <iostream>
 #include "list.h"
 
+// TODO: Implement all methods
 template <typename T>
 class ForwardList : public List<T> {
 private:
@@ -10,16 +11,16 @@ private:
         T data;
         Node* next;
 
-        Node() {
+        Node(){
             next = nullptr;
         }
 
-        Node(T value) {
+        Node(T value){
             data = value;
             next = nullptr;
         }
 
-        void killSelf() {
+        void killSelf(){
             delete this;
         }
     };
@@ -29,193 +30,197 @@ private:
     int nodes;
 
 public:
-    ForwardList() : List<T>(), head(nullptr), nodes(0) {}
+    ForwardList() : List<T>() {}
 
-    ~ForwardList() {
-        clear();
+    ~ForwardList(){
+        // TODO
     }
 
-    T front() {
-        if (head == nullptr) {
+    T front(){
+        if(head == nullptr){
             throw std::out_of_range("List is empty");
         }
         return head->data;
     }
 
-    T back() {
-        if (head == nullptr) {
+    T back(){
+        if(head == nullptr){
             throw std::out_of_range("List is empty");
         }
+        Node* p = head;
+        while(p->next != nullptr){
+            p = p->next;
+        }
+        return p->data;
+    }
+
+    void push_front(T data){
+        if(head == nullptr){
+            head = new Node(data);
+        }
+        Node* p = new Node(data);
+        p->next = head;
+        head = p;
+    }
+
+    void push_back(T data){
+        if(head == nullptr){
+            head = new Node(data);
+        }
+        Node* p = new Node(data);
+        p->next = nullptr;
         Node* temp = head;
-        while (temp->next != nullptr) {
+        while(temp->next != nullptr){
             temp = temp->next;
         }
-        return temp->data;
+        temp->next = p;
     }
 
-    void push_front(T data) {
-        Node* newNode = new Node(data);
-        newNode->next = head;
-        head = newNode;
-        nodes++;
-    }
-
-    void push_back(T data) {
-        Node* newNode = new Node(data);
-        if (head == nullptr) {
-            head = newNode;
-        } else {
-            Node* temp = head;
-            while (temp->next != nullptr) {
-                temp = temp->next;
-            }
-            temp->next = newNode;
-        }
-        nodes++;
-    }
-
-    T pop_front() {
-        if (head == nullptr) {
+    T pop_front(){
+        if(head == nullptr){
             throw std::out_of_range("List is empty");
         }
-        Node* temp = head;
-        head = head->next;
-        T data = temp->data;
-        temp->killSelf();
-        nodes--;
+
+        Node* p = head;
+        T data = head->data;
+        head = p->next;
+        delete p;
         return data;
     }
 
-    T pop_back() {
-        if (head == nullptr) {
+    T pop_back(){
+        if(head == nullptr){
             throw std::out_of_range("List is empty");
         }
-        if (head->next == nullptr) {
-            T data = head->data;
+        if(head->next == nullptr){
             delete head;
-            head = nullptr;
-            nodes--;
-            return data;
         }
-        Node* temp = head;
-        while (temp->next->next != nullptr) {
-            temp = temp->next;
+        Node* p = head;
+        while(p->next->next != nullptr){
+            p = p->next;
         }
-        T data = temp->next->data;
-        delete temp->next;
-        temp->next = nullptr;
-        nodes--;
+        T data = p->next->data;
+        delete p->next;
+        p->next = nullptr; return data;
+    }
+
+    T insert(T data, int pos){
+        if(pos > this->size()){
+            throw std::out_of_range("List is out of range");
+        }
+        Node* p = head;
+        for(int i = 0; i < pos; i++){
+            p = p->next;
+        }
+        Node* p2 = new Node(data);
+        p2->next = p->next;
+        p->next = p2;
         return data;
     }
 
-    T insert(T data, int pos) {
-        if (pos < 0 || pos > nodes) {
-            throw std::out_of_range("out of range");
+    bool remove(int pos){
+        if(pos > this->size()){
+            throw std::out_of_range("List is out of range");
         }
-        if (pos == 0) {
-            push_front(data);
-            return data;
-        }
-        Node* newNode = new Node(data);
-        Node* temp = head;
-        for (int i = 0; i < pos - 1; i++) {
-            temp = temp->next;
-        }
-        newNode->next = temp->next;
-        temp->next = newNode;
-        nodes++;
-        return data;
-    }
-
-    bool remove(int pos) {
-        if (pos < 0 || pos >= nodes) {
-            throw std::out_of_range("out of range");
-        }
-        if (pos == 0) {
-            pop_front();
+        if(pos == this->size()){
+            pop_back();
             return true;
         }
-        Node* temp = head;
-        for (int i = 0; i < pos - 1; i++) {
-            temp = temp->next;
+        Node* p = head;
+        for(int i = 0; i < pos-1; i++){
+            p = p->next;
         }
-        Node* nodeToRemove = temp->next;
-        temp->next = temp->next->next;
-        nodeToRemove->killSelf();
-        nodes--;
+        Node* p2 = p->next->next;
+        delete p->next;
+        p->next = p2;
         return true;
     }
 
-    T& operator[](int pos) {
-        if (pos < 0 || pos >= nodes) {
-            throw std::out_of_range("out of range");
+    T& operator[](int pos){
+        if(pos > this->size()){
+            throw std::out_of_range("List is out of range");
         }
-        Node* temp = head;
-        for (int i = 0; i < pos; i++) {
-            temp = temp->next;
+        Node* p = head;
+        for(int i = 0; i < pos; i++){
+            p = p->next;
         }
-        return temp->data;
+        return p->data;
     }
 
-    bool is_empty() {
-        return head == nullptr;
+    bool is_empty(){
+        if(head == nullptr){
+            return true;
+        }
     }
 
-    int size() {
-        return nodes;
+    int size(){
+        int count = 0;
+        Node* p = head;
+        while(p != nullptr){
+            p = p->next;
+            count++;
+        }
+        return count;
     }
 
-    void clear() {
-        while (!is_empty()) {
+    void clear(){
+        Node* p = head;
+        while(p != nullptr){
             pop_front();
         }
     }
 
-    void sort() {
-
-        if (nodes < 2) return;
-
-        bool swapped;
-        do {
-            swapped = false;
-            Node* current = head;
-            while (current != nullptr && current->next != nullptr) {
-                if (current->data > current->next->data) {
-                    std::swap(current->data, current->next->data);
-                    swapped = true;
+    void sort(){
+        bool sorted = true;
+        if(head == nullptr||head->next == nullptr){
+            return;
+        }
+        Node* p = head;
+        do{
+            sorted = true;
+            p=head;
+            while(p->next != nullptr){
+                if(p->next->data < p->data){
+                    sorted = false;
+                    swap(p->data, p->next->data);
                 }
-                current = current->next;
+                p=p->next;
             }
-        } while (swapped);
+        }while(sorted == false);
     }
 
-    bool is_sorted() {
-        Node* temp = head;
-        while (temp != nullptr && temp->next != nullptr) {
-            if (temp->data > temp->next->data) {
+    bool is_sorted(){
+        if(head == nullptr){
+            return false;
+        }
+        if(head->next == nullptr){
+            return true;
+        }
+        Node* p = head;
+        while(p->next != nullptr){
+            if(p->next->data < p->data){
                 return false;
             }
-            temp = temp->next;
+            p=p->next;
         }
         return true;
     }
 
-    void reverse() {
-        Node* current = head;
-        Node* prev = nullptr;
-        Node* next = nullptr;
-        while (current != nullptr) {
-            next = current->next;
-            current->next = prev;
-            prev = current;
-            current = next;
+    void reverse(){
+        Node* newHead = nullptr;
+        while (head != nullptr) {
+            Node* temp = head;
+            head = head->next;
+            temp->next = newHead;
+            newHead = temp;
         }
-        head = prev;
+        head = newHead;
     }
 
-    std::string name() {
+    std::string name(){
         return "ForwardList";
-    }
+        }
+
 };
 
-#endif // FORWARD_H
+#endif

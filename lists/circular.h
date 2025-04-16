@@ -5,99 +5,209 @@
 
 // TODO: Implement all methods
 template <typename T>
-class CircularList : public List<T> {  
-    private:
-        struct Node {
-            T data;
-            Node* next;
-            Node* prev;
+class CircularList : public List<T> {
+private:
+    struct Node {
+        T data;
+        Node* next;
+        Node* prev;
 
-            Node(){ 
-                // TODO
+        Node(){
+
+            next = nullptr;
+            prev = nullptr;
+        }
+
+        Node(T value){
+            data = value;
+            next = nullptr;
+            prev = nullptr;
+        }
+
+        void killSelf(){
+            delete this;
+        }
+    };
+
+private:
+    Node* head;//sentinel
+    int nodes;
+
+public:
+    CircularList() : List<T>() {
+        head = new Node();
+        head->next = head;
+        head->prev = head;
+        nodes = 0;
+    }
+
+    ~CircularList(){
+        clear();      // borra todos los nodos con pop_front
+        delete head;  // finalmente borra el centinela
+    }
+    T front(){
+        return head->next->data;
+
+    }
+
+    T back(){
+        Node* p = head;
+        while (p->next!=head){
+            p = p->next;
+        }
+        return p->data;
+    }
+    void push_front(T data){
+        Node* newNode = new Node(data);
+        newNode->next = head->next;
+        newNode->prev = head;
+        head->next = newNode;
+        nodes++;
+        newNode->next->prev = newNode;
+    }
+
+    void push_back(T data){
+        Node* newNode = new Node(data);
+        newNode->next = head;
+        newNode->prev = head->prev;
+        head->prev = newNode;
+        nodes++;
+        newNode->prev->next = newNode;
+    }
+
+    T pop_front(){
+        if (head->next == head){
+            throw std::out_of_range("List is empty");
+        }
+        Node* temp = head->next;
+        head->next = temp->next;
+        temp->next->prev = head;
+        T data = temp->data;
+        temp->killSelf();
+        nodes--;
+        return data;
+    }
+
+    T pop_back(){
+        if (head->prev == head){
+            throw std::out_of_range("List is empty");
+        }
+        Node* temp = head->prev;
+        head->prev = temp->prev;
+        temp->prev->next = head;
+        T data = temp->data;
+        temp->killSelf();
+        nodes--;
+        return data;
+    }
+    T insert(T data, int pos){
+        if (pos < 0 || pos >= nodes) {
+            throw std::out_of_range("out of range");
+        }
+        if (pos == nodes) {
+            push_back(data);
+            return;
+        }
+        Node* newNode = new Node(data);
+        Node* temp = head->next;
+        for (int i = 0; i < pos-1; i++){
+            temp = temp->next;
+        }
+        newNode->next = temp->next;
+        newNode->prev = temp;
+        temp->next->prev = newNode;
+        temp->next = newNode;
+        nodes++;
+        return data;
+    }
+
+    bool remove(int pos){
+        if (pos < 0 || pos >= nodes) {
+            throw std::out_of_range("out of range");
+        }
+
+        Node* temp = head->next;
+        for (int i = 0; i < pos; i++){
+            temp = temp->next;
+        }
+        temp->next->prev = temp->prev;
+        temp->prev->next = temp->next;
+        temp->killSelf();
+        nodes--;
+        return true;
+    }
+
+    T& operator[](int pos){
+        if (pos < 0 || pos >= nodes) {
+            throw std::out_of_range("out of range");
+        }
+
+        Node* temp = head->next;
+        for (int i = 0; i < pos; i++){
+            temp = temp->next;
+        }
+        return temp->data;
+    }
+
+    bool is_empty(){
+        if (head->next == head){
+            return true;
+        }
+        return false;
+    }
+
+    int size(){
+        return nodes;
+    }
+
+    void clear(){
+        if (head->next == head){
+            return;
+        }
+        while (head->next != head){
+            pop_front();
+        }
+    }
+
+    void sort(){
+        if (nodes < 2) return;
+
+        bool swapped;
+        do {
+            swapped = false;
+            Node* current = head->next;
+            while (current->next != head) {
+                if (current->data > current->next->data) {
+                    std::swap(current->data, current->next->data);
+                    swapped = true;
+                }
+                current = current->next;
             }
+        } while (swapped);
+    }
 
-            Node(T value){
-                // TODO
+
+    bool is_sorted(){
+        Node* temp = head->next;
+        while (temp->next != head){
+            if (temp->data > temp->next->data){
+                return false;
             }
-
-            void killSelf(){
-                // TODO      
-            }    
-        };
-
-    private:
-        Node* head;//sentinel
-        int nodes; 
-
-    public:
-        CircularList() : List<T>() { }
-
-        ~CircularList(){
-           // TODO
-        }       
-
-         T front(){
-            throw ("sin definir");
+            temp = temp->next;
         }
+        return true;
 
-        T back(){
-            throw ("sin definir");
-        }
+    }
+    void reverse(){
+        Node* current = head;
+        do {
+            swap(current->next, current->prev);
+            current = current->prev;
+        } while (current != head);
+    }
 
-        void push_front(T data){
-            throw ("sin definir");
-        }
-
-        void push_back(T data){
-            throw ("sin definir");
-        }
-
-        T pop_front(){
-            throw ("sin definir");
-        }
-
-        T pop_back(){
-            throw ("sin definir");
-        }
-
-        T insert(T data, int pos){
-            throw ("sin definir");
-        }
-
-        bool remove(int pos){
-            throw ("sin definir");
-        }
-
-        T& operator[](int pos){
-            throw ("sin definir");
-        }
-
-        bool is_empty(){
-            throw ("sin definir");
-        }
-
-        int size(){
-            throw ("sin definir");
-        }
-
-        void clear(){
-            throw ("sin definir");
-        }
-        
-        void sort(){
-            throw ("sin definir");
-        }
-
-        bool is_sorted(){
-            throw ("sin definir");
-        }
-
-        void reverse(){
-            throw ("sin definir");
-        }
-
-        std::string name(){
-            return "ForwardList";
+    std::string name(){
+        return "ForwardList";
         }
 };
 
